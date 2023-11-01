@@ -28,6 +28,7 @@ def main():
                         help='Loads the best arguments for each method, '
                              'dataset and memory buffer.')
     add_management_args(parser)
+    add_gcil_args(parser)
     args = parser.parse_known_args()[0]
     mod = importlib.import_module('models.' + args.model)
 
