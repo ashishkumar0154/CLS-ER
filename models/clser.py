@@ -95,8 +95,10 @@ class CLSER(ContinualModel):
             output_aug = buf_labels[:real_batch_size]
             error = output_aug - stable_model_prob_aug
             sorted_ouput = torch.argsort(error, descending=True)
-            sorted_input = buf_inputs[sorted_ouput, :]
-            outputs_1 = output_aug[sorted_ouput]
+            sorted_input = []
+            for index in sorted_ouput:
+                sorted_input.append(buf_inputs[index])s
+            outputs_1 = output_aug[sorted_ouput, :]
 
             inputs = torch.cat((inputs, buf_inputs))
             labels = torch.cat((labels, buf_labels))
