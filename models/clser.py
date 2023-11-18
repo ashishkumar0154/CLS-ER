@@ -108,9 +108,17 @@ class CLSER(ContinualModel):
         loss.backward()
         self.opt.step()
 
+        stable_model_logits_aug = self.stable_model(not_aug_inputs)
+        stable_model_prob_aug = F.softmax(stable_model_logits_aug, 1)
+        output_aug = labels[:real_batch_size]
+        error = output_aug - stable_model_prob_aug
+        sorted_ouput = torch.argsort(error, descending=True)
+        sorted_input = not_aug_inputs[sorted_ouput]
+        outputs_1 = output_aug[sorted_ouput]
+
         self.buffer.add_data(
-            examples=not_aug_inputs,
-            labels=labels[:real_batch_size],
+            examples=sorted_input,
+            labels=outputs_1,        
         )
 
         # Update the ema model
