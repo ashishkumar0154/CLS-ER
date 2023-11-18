@@ -59,7 +59,7 @@ class CLSER(ContinualModel):
 
         self.opt.zero_grad()
         loss = 0
-        sorted_input = None
+        sorted_input = []
 
         if not self.buffer.is_empty():
 
@@ -116,7 +116,7 @@ class CLSER(ContinualModel):
 
         loss.backward()
         self.opt.step()
-        if not sorted_input:
+        if len(sorted_input) == 0:
             self.buffer.add_data(
                 examples=not_aug_inputs,
                 labels=labels[:real_batch_size],        
