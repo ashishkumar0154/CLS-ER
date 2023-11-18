@@ -98,7 +98,7 @@ class CLSER(ContinualModel):
             sorted_input = []
             for index in sorted_ouput:
                 sorted_input.append(buf_inputs[index])
-            outputs_1 = output_aug[sorted_ouput, :]
+            outputs_1 = output_aug[sorted_ouput]
 
             inputs = torch.cat((inputs, buf_inputs))
             labels = torch.cat((labels, buf_labels))
