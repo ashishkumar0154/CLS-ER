@@ -89,6 +89,14 @@ class CLSER(ContinualModel):
                 self.writer.add_scalar(f'Task {self.current_task}/l_cons', l_cons.item(), self.iteration)
                 self.writer.add_scalar(f'Task {self.current_task}/l_reg', l_reg.item(), self.iteration)
 
+            stable_model_logits_aug = self.stable_model(inputs)
+            stable_model_prob_aug = F.softmax(stable_model_logits_aug, 1)
+            output_aug = labels[:real_batch_size]
+            error = output_aug - stable_model_prob_aug
+            sorted_ouput = torch.argsort(error, descending=True)
+            sorted_input = inputs[sorted_ouput]
+            outputs_1 = output_aug[sorted_ouput]
+
             inputs = torch.cat((inputs, buf_inputs))
             labels = torch.cat((labels, buf_labels))
 
@@ -107,14 +115,6 @@ class CLSER(ContinualModel):
 
         loss.backward()
         self.opt.step()
-
-        stable_model_logits_aug = self.stable_model(not_aug_inputs)
-        stable_model_prob_aug = F.softmax(stable_model_logits_aug, 1)
-        output_aug = labels[:real_batch_size]
-        error = output_aug - stable_model_prob_aug
-        sorted_ouput = torch.argsort(error, descending=True)
-        sorted_input = not_aug_inputs[sorted_ouput]
-        outputs_1 = output_aug[sorted_ouput]
 
         self.buffer.add_data(
             examples=sorted_input,
