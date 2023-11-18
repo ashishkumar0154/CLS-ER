@@ -77,7 +77,7 @@ class Buffer:
         if not hasattr(self, 'examples'):
             self.init_tensors(examples, labels, logits, task_labels, activations)
 
-        for i in range(examples.shape[0]):
+        for i in range(len(examples)):
             index = reservoir(self.num_seen_examples, self.buffer_size)
             self.num_seen_examples += 1
             if index >= 0:
