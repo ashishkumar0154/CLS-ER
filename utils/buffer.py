@@ -81,7 +81,7 @@ class Buffer:
             index = reservoir(self.num_seen_examples, self.buffer_size)
             self.num_seen_examples += 1
             if index >= 0:
-                self.examples[index] = examples[i][0].to(self.device)
+                self.examples[index] = examples[i].to(self.device)
                 if labels is not None:
                     self.labels[index] = labels[i].to(self.device)
                 if logits is not None:
