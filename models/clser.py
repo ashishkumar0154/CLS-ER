@@ -125,7 +125,7 @@ class CLSER(ContinualModel):
             )
         else:
             self.buffer.add_data(
-                examples=torch.asarray(sorted_input),
+                examples=torch.tensor(sorted_input),
                 labels=outputs_1,        
             )
 
